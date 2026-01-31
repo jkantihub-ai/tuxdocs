@@ -32,7 +32,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeSection, onNavigate, on
 
   return (
     <div className="flex h-screen overflow-hidden bg-slate-50 text-slate-900">
-      <aside className="hidden md:flex flex-col w-72 bg-white border-r border-slate-200">
+      <aside className="hidden lg:flex flex-col w-72 bg-white border-r border-slate-200">
         <div className="p-8 flex items-center gap-4">
           <div className="text-orange-500 bg-orange-50 p-2 rounded-2xl">
             {TUX_LOGO('w-10 h-10')}
@@ -71,13 +71,13 @@ const Layout: React.FC<LayoutProps> = ({ children, activeSection, onNavigate, on
           </button>
         </nav>
 
-        <div className="p-8">
+        <div className="p-8 mt-auto">
           <div className="p-6 rounded-[2rem] bg-slate-900 text-white relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-20 h-20 bg-orange-500/20 blur-2xl group-hover:bg-orange-500/40 transition-all"></div>
             <p className="text-[10px] text-orange-500 font-black uppercase tracking-widest mb-2">System Status</p>
             <p className="text-sm font-bold">Stable v4.2.0</p>
             <div className="mt-4 flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${isPro ? 'bg-purple-500' : 'bg-green-500'} animate-pulse`}></div>
+              <div className={`w-2 h-2 rounded-full ${isPro ? 'bg-purple-500' : 'bg-green-500'} animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]`}></div>
               <span className="text-[10px] text-slate-400 font-bold">{isPro ? 'AI Hub Linked' : 'Uptime 99.9%'}</span>
             </div>
           </div>
@@ -85,19 +85,19 @@ const Layout: React.FC<LayoutProps> = ({ children, activeSection, onNavigate, on
       </aside>
 
       <div className="flex-1 flex flex-col relative overflow-hidden">
-        <header className="h-20 flex items-center justify-between px-10 bg-white border-b border-slate-100 sticky top-0 z-10">
-          <div className="md:hidden flex items-center gap-3">
-             <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-slate-500 hover:text-slate-900 p-2 bg-slate-50 rounded-xl">
+        <header className="h-20 flex items-center justify-between px-6 sm:px-10 bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-10">
+          <div className="lg:hidden flex items-center gap-3">
+             <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-slate-500 hover:text-slate-900 p-2 bg-slate-50 rounded-xl transition-all">
                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
              </button>
-             <div className="text-orange-500">
-              {TUX_LOGO('w-8 h-8')}
+             <div className="text-orange-500 scale-75 sm:scale-100">
+              {TUX_LOGO('w-10 h-10')}
             </div>
           </div>
 
-          <div className="flex-1 max-w-3xl px-4 hidden sm:block">
+          <div className="flex-1 max-w-2xl px-4 hidden sm:block">
             <div className="relative group">
-              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400">
+              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-orange-500 transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
               </div>
               <input 
@@ -114,55 +114,61 @@ const Layout: React.FC<LayoutProps> = ({ children, activeSection, onNavigate, on
             </div>
           </div>
 
-          <div className="flex items-center gap-6">
-             <button className="p-3 bg-slate-50 text-slate-400 hover:text-orange-600 rounded-2xl transition-all relative">
+          <div className="flex items-center gap-4 sm:gap-6">
+             <button className="hidden sm:flex p-3 bg-slate-50 text-slate-400 hover:text-orange-600 rounded-2xl transition-all relative">
                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
                <span className={`absolute top-3 right-3 w-2.5 h-2.5 ${isPro ? 'bg-purple-500' : 'bg-orange-500'} rounded-full border-2 border-white`}></span>
              </button>
-             <div className="flex items-center gap-3 pl-6 border-l border-slate-100">
+             <div className="flex items-center gap-3 pl-4 sm:pl-6 border-l border-slate-100">
                 <div className="text-right hidden sm:block">
-                  <p className="text-xs font-black text-slate-900 leading-none">Tux User</p>
-                  <p className="text-[10px] text-slate-400 font-bold mt-1">{isPro ? 'Pro Member' : 'Guest'}</p>
+                  <p className="text-xs font-black text-slate-900 leading-none">Tux Guest</p>
+                  <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-widest">{isPro ? 'Pro Member' : 'Reader'}</p>
                 </div>
-                <div className={`w-10 h-10 rounded-2xl ${isPro ? 'pro-gradient' : 'bg-orange-500'} flex items-center justify-center text-white font-black text-sm shadow-lg`}>
+                <div 
+                  onClick={() => onNavigate(NavigationSection.Pro)}
+                  className={`w-10 h-10 rounded-2xl ${isPro ? 'pro-gradient' : 'bg-orange-500'} flex items-center justify-center text-white font-black text-sm shadow-lg cursor-pointer hover:scale-110 transition-transform`}
+                >
                   TU
                 </div>
              </div>
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-10">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-10 pb-24">
           {children}
         </main>
       </div>
 
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
-          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)}></div>
-          <div className="absolute left-0 top-0 bottom-0 w-72 bg-white p-8">
+        <div className="fixed inset-0 z-[100] lg:hidden">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300" onClick={() => setIsMobileMenuOpen(false)}></div>
+          <div className="absolute left-0 top-0 bottom-0 w-72 bg-white p-8 animate-in slide-in-from-left duration-300 shadow-2xl">
             <div className="flex items-center gap-4 mb-12">
               <div className="text-orange-500 bg-orange-50 p-2 rounded-2xl">
                 {TUX_LOGO('w-10 h-10')}
               </div>
-              <span className="text-2xl font-black text-slate-900">TuxDocs</span>
+              <span className="text-2xl font-black text-slate-900 tracking-tighter">TuxDocs</span>
             </div>
             <nav className="space-y-4">
               {navItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => { onNavigate(item.id); setIsMobileMenuOpen(false); }}
-                  className={`w-full flex items-center gap-3 px-6 py-4 rounded-2xl font-bold transition-all ${activeSection === item.id ? 'bg-orange-500 text-white shadow-xl' : 'text-slate-500'}`}
+                  className={`w-full flex items-center gap-3 px-6 py-4 rounded-2xl font-bold transition-all ${activeSection === item.id ? 'bg-orange-500 text-white shadow-xl' : 'text-slate-500 hover:bg-slate-50'}`}
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} /></svg>
                   {item.label}
                 </button>
               ))}
-              <button
-                onClick={() => { onNavigate(NavigationSection.Pro); setIsMobileMenuOpen(false); }}
-                className={`w-full flex items-center gap-3 px-6 py-4 rounded-2xl font-bold transition-all ${activeSection === NavigationSection.Pro ? 'pro-gradient text-white shadow-xl' : 'bg-slate-900 text-white'}`}
-              >
-                Tux Pro
-              </button>
+              <div className="pt-6 border-t border-slate-100 mt-6">
+                <button
+                  onClick={() => { onNavigate(NavigationSection.Pro); setIsMobileMenuOpen(false); }}
+                  className={`w-full flex items-center gap-3 px-6 py-4 rounded-2xl font-bold transition-all ${activeSection === NavigationSection.Pro ? 'pro-gradient text-white shadow-xl' : 'bg-slate-900 text-white shadow-lg'}`}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-7.714 2.143L11 21l-2.286-6.857L1 12l7.714-2.143L11 3z" /></svg>
+                  Tux Pro
+                </button>
+              </div>
             </nav>
           </div>
         </div>

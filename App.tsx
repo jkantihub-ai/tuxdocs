@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import Layout from './components/Layout';
 import MainContent from './components/MainContent';
 import TuxAssistant from './components/TuxAssistant';
@@ -26,16 +26,14 @@ const App: React.FC = () => {
   const handleSearch = async (query: string) => {
     setSearchQuery(query);
     setViewingArticle(null);
-    if (!query) {
+    if (!query.trim()) {
       setAiRankedIds([]);
       setAiSearchExplanation('');
       return;
     }
     
-    // Always start with home view for search
     setActiveSection(NavigationSection.Home);
 
-    // AI search only happens if Pro is enabled
     if (isProEnabled) {
       setIsSearching(true);
       try {
@@ -45,16 +43,16 @@ const App: React.FC = () => {
           setAiSearchExplanation(result.explanation);
         } else {
           setAiRankedIds([]);
-          setAiSearchExplanation('');
+          setAiSearchExplanation('Tux AI couldn\'t find a specific match, showing standard results.');
         }
       } catch (e) {
+        console.error("AI Search Failed", e);
         setAiRankedIds([]);
         setAiSearchExplanation('');
       } finally {
         setIsSearching(false);
       }
     } else {
-      // Local fallback for static version
       setAiRankedIds([]);
       setAiSearchExplanation('');
     }
@@ -88,41 +86,37 @@ const App: React.FC = () => {
       return <ArticleView doc={viewingArticle} onBack={() => setViewingArticle(null)} isPro={isProEnabled} />;
     }
 
-    if (activeSection === NavigationSection.Terminal) {
-      return <Terminal isPro={isProEnabled} onUpgrade={() => setActiveSection(NavigationSection.Pro)} />;
+    switch (activeSection) {
+      case NavigationSection.Terminal:
+        return <Terminal isPro={isProEnabled} onUpgrade={() => setActiveSection(NavigationSection.Pro)} />;
+      case NavigationSection.About:
+        return <About />;
+      case NavigationSection.Pro:
+        return <ProLanding isPro={isProEnabled} onUpgrade={() => setIsProEnabled(true)} />;
+      default:
+        if (isSearching) {
+          return (
+            <div className="flex flex-col items-center justify-center py-32 space-y-6">
+              <div className="w-16 h-16 border-4 border-orange-500/20 border-t-orange-500 rounded-full animate-spin"></div>
+              <p className="text-slate-400 font-black uppercase tracking-[0.3em] text-xs">AI Librarian Searching...</p>
+            </div>
+          );
+        }
+        return (
+          <MainContent 
+            section={activeSection} 
+            onEdit={(doc) => setActiveContribution({ type: 'edit', doc })}
+            onFlag={(doc) => setActiveContribution({ type: 'flag', doc })}
+            onRead={(doc) => setViewingArticle(doc)}
+            contributions={contributions}
+            onReview={(id, status) => setContributions(prev => prev.filter(c => c.id !== id))}
+            searchQuery={searchQuery}
+            aiRankedIds={aiRankedIds}
+            aiSearchExplanation={aiSearchExplanation}
+            isPro={isProEnabled}
+          />
+        );
     }
-
-    if (activeSection === NavigationSection.About) {
-      return <About />;
-    }
-
-    if (activeSection === NavigationSection.Pro) {
-      return <ProLanding isPro={isProEnabled} onUpgrade={() => setIsProEnabled(true)} />;
-    }
-
-    if (isSearching) {
-      return (
-        <div className="flex flex-col items-center justify-center py-32 space-y-6">
-          <div className="w-16 h-16 border-4 border-orange-500/20 border-t-orange-500 rounded-full animate-spin"></div>
-          <p className="text-slate-400 font-black uppercase tracking-[0.3em] text-xs">AI Indexing docs...</p>
-        </div>
-      );
-    }
-
-    return (
-      <MainContent 
-        section={activeSection} 
-        onEdit={(doc) => setActiveContribution({ type: 'edit', doc })}
-        onFlag={(doc) => setActiveContribution({ type: 'flag', doc })}
-        onRead={(doc) => setViewingArticle(doc)}
-        contributions={contributions}
-        onReview={(id, status) => setContributions(prev => prev.filter(c => c.id !== id))}
-        searchQuery={searchQuery}
-        aiRankedIds={aiRankedIds}
-        aiSearchExplanation={aiSearchExplanation}
-        isPro={isProEnabled}
-      />
-    );
   };
 
   return (
@@ -132,11 +126,11 @@ const App: React.FC = () => {
       onSearch={handleSearch}
       isPro={isProEnabled}
     >
-      <div className="max-w-7xl mx-auto h-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {renderContent()}
         
         {activeSection === NavigationSection.Home && !searchQuery && !viewingArticle && !isSearching && (
-          <section className="mt-20 p-12 md:p-16 rounded-[4rem] relative overflow-hidden bg-slate-900 text-white shadow-3xl">
+          <section className="mt-20 p-8 md:p-16 rounded-[4rem] relative overflow-hidden bg-slate-900 text-white shadow-3xl">
             <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-orange-500/20 to-transparent blur-[120px]"></div>
             <div className="relative z-10 max-w-2xl">
               <div className="px-4 py-2 bg-orange-500/10 border border-orange-500/20 rounded-2xl inline-block text-[10px] font-black uppercase tracking-[0.3em] text-orange-500 mb-6">
@@ -146,18 +140,18 @@ const App: React.FC = () => {
                 Empowering <span className="text-orange-500">Systems</span> through Knowledge.
               </h2>
               <p className="text-slate-400 mb-10 text-lg leading-relaxed font-medium">
-                TuxDocs simplifies complex Linux documentation with a clean modern interface and crowdsourced moderation. {isProEnabled ? 'AI Enhanced features are active.' : 'Enable Pro for AI features.'}
+                TuxDocs modernizes Linux documentation for the next generation. Join our community of penguins today. {isProEnabled ? 'AI Features Active.' : ''}
               </p>
-              <div className="flex flex-wrap gap-6">
+              <div className="flex flex-wrap gap-4 sm:gap-6">
                 <button 
                   onClick={() => handleNavigate(NavigationSection.HowTos)}
-                  className="px-10 py-5 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-2xl transition-all shadow-2xl shadow-orange-500/40 scale-105 active:scale-95"
+                  className="px-8 py-4 sm:px-10 sm:py-5 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-2xl transition-all shadow-2xl shadow-orange-500/40 scale-105 active:scale-95"
                 >
                   Browse HOWTOs
                 </button>
                 <button 
                   onClick={() => setActiveContribution({ type: 'new' })}
-                  className="px-10 py-5 bg-white/5 hover:bg-white/10 text-white font-black border border-white/10 rounded-2xl transition-all backdrop-blur-md"
+                  className="px-8 py-4 sm:px-10 sm:py-5 bg-white/5 hover:bg-white/10 text-white font-black border border-white/10 rounded-2xl transition-all backdrop-blur-md"
                 >
                   Contribute Node
                 </button>
@@ -179,13 +173,13 @@ const App: React.FC = () => {
 
       {isProEnabled && <TuxAssistant />}
       
-      <div className="fixed bottom-0 left-0 right-0 bg-white/60 backdrop-blur-xl border-t border-slate-100 px-10 py-2 flex items-center justify-between pointer-events-none md:pointer-events-auto z-[40]">
+      <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-slate-100 px-6 sm:px-10 py-3 flex items-center justify-between pointer-events-none md:pointer-events-auto z-[40]">
         <div className="flex items-center gap-3 text-[10px] text-slate-400 font-black uppercase tracking-[0.3em]">
           <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]"></div>
-          Node: ldp-distributed-01
+          Node: ldp-stable-01
         </div>
-        <div className="hidden sm:block text-[10px] text-slate-300 font-bold">
-          The Linux Documentation Project © 2025 • {isProEnabled ? 'Pro Active' : 'Static Mode'}
+        <div className="hidden sm:block text-[10px] text-slate-300 font-bold tracking-widest uppercase">
+          The Linux Documentation Project © 2025 • {isProEnabled ? 'Pro' : 'Community'}
         </div>
       </div>
     </Layout>

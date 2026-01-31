@@ -9,7 +9,7 @@
     <meta name="description" content="Community-driven Linux Documentation Project with optional AI-powered Pro features.">
     
     <!-- PWA Manifest -->
-    <link rel="manifest" href="./metadata.json">
+    <link rel="manifest" href="metadata.json">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/518/518713.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -49,21 +49,27 @@
         .pro-gradient {
             background: linear-gradient(135deg, #f97316 0%, #7c3aed 100%);
         }
+        /* Fix for potential rendering issues on GH Pages by ensuring root has height */
+        #root {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
     </style>
 <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@^19.2.4",
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react-dom/client": "https://esm.sh/react-dom@^19.2.4/client"
+    "react": "https://esm.sh/react@19.0.0",
+    "react/": "https://esm.sh/react@19.0.0/",
+    "@google/genai": "https://esm.sh/@google/genai@0.2.1",
+    "react-dom/": "https://esm.sh/react-dom@19.0.0/",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client"
   }
 }
 </script>
 </head>
 <body>
     <div id="root"></div>
-    <script type="module" src="./index.tsx"></script>
+    <script type="module" src="index.tsx"></script>
 </body>
 </html>
