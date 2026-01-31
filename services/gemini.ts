@@ -1,7 +1,8 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+// Always initialize with process.env.API_KEY directly as per guidelines.
+const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY as string });
 
 export const askTux = async (prompt: string, history: {role: string, content: string}[]) => {
   const ai = getAI();
@@ -70,8 +71,9 @@ export const searchDocsAI = async (query: string, availableDocs: any[]): Promise
 export const executeSimulatedCommand = async (command: string, history: string[]) => {
   const ai = getAI();
   try {
+    // Upgrading to gemini-3-pro-preview for complex terminal simulation tasks.
     const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
+      model: 'gemini-3-pro-preview',
       contents: `Simulate a Linux terminal (Ubuntu 24.04 style). The user entered: "${command}". 
       Previous context: ${history.join('\n')}.
       Provide the realistic terminal output (stdout/stderr). 

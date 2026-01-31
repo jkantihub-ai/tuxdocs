@@ -2,11 +2,17 @@
   "name": "TuxDocs | The Modern LDP",
   "short_name": "TuxDocs",
   "description": "AI-powered Linux Documentation Project with real-time assistance, virtual terminal simulation, and community moderation.",
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#f8fafc",
   "theme_color": "#f97316",
-  "requestFramePermissions": [
-    "microphone"
-  ]
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/518/518713.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "requestFramePermissions": []
 }

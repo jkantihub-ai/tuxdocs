@@ -15,6 +15,30 @@ const Terminal: React.FC = () => {
     scrollRef.current?.scrollTo(0, scrollRef.current.scrollHeight);
   }, [history]);
 
+  const mockProcess = (cmd: string): string => {
+    const args = cmd.split(' ');
+    const command = args[0].toLowerCase();
+
+    switch (command) {
+      case 'help':
+        return 'Available commands: help, ls, whoami, uname, date, clear, cat, echo\nThis terminal is AI-simulated; try any Linux command!';
+      case 'ls':
+        return 'Documents/  Downloads/  Kernel/  Scripts/  tuxdocs_config.yaml';
+      case 'whoami':
+        return 'tux';
+      case 'uname':
+        return 'Linux tuxdocs-node 6.8.0-42-generic #42-Ubuntu SMP PREEMPT_DYNAMIC';
+      case 'date':
+        return new Date().toString();
+      case 'cat':
+        return args[1] ? `Reading ${args[1]}... Access denied: AI required for full context simulation.` : 'cat: missing file operand';
+      case 'echo':
+        return args.slice(1).join(' ');
+      default:
+        return `bash: ${command}: command not found (Falling back to AI...)`;
+    }
+  };
+
   const handleCommand = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isProcessing) return;
@@ -30,13 +54,21 @@ const Terminal: React.FC = () => {
       return;
     }
 
-    const output = await executeSimulatedCommand(cmd, history.map(h => h.text).slice(-5));
-    setHistory(prev => [...prev, { type: 'out', text: output }]);
-    setIsProcessing(false);
+    try {
+      // First try AI simulation
+      const output = await executeSimulatedCommand(cmd, history.map(h => h.text).slice(-5));
+      setHistory(prev => [...prev, { type: 'out', text: output }]);
+    } catch (err) {
+      // Fallback to local mock
+      const output = mockProcess(cmd);
+      setHistory(prev => [...prev, { type: 'out', text: output }]);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#0d0d0d] rounded-[2rem] border border-slate-800 shadow-2xl overflow-hidden font-mono">
+    <div className="flex flex-col h-[70vh] bg-[#0d0d0d] rounded-[2rem] border border-slate-800 shadow-2xl overflow-hidden font-mono">
       <div className="bg-[#1a1a1a] px-6 py-3 border-b border-slate-800 flex items-center justify-between">
         <div className="flex gap-2">
           <div className="w-3 h-3 rounded-full bg-red-500/50"></div>

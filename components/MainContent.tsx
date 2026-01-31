@@ -39,18 +39,28 @@ const MainContent: React.FC<MainContentProps> = ({
   };
 
   const getFilteredDocs = () => {
-    if (searchQuery && aiRankedIds.length > 0) {
-      return MOCK_DOCS.filter(d => aiRankedIds.includes(d.id))
-        .sort((a, b) => aiRankedIds.indexOf(a.id) - aiRankedIds.indexOf(b.id));
-    }
+    let docs = [...MOCK_DOCS];
+
+    // Priority 1: Search Logic
     if (searchQuery) {
-      return MOCK_DOCS.filter(d => 
-        d.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-        d.summary.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+      if (aiRankedIds.length > 0) {
+        // Use AI rankings if available
+        docs = docs.filter(d => aiRankedIds.includes(d.id))
+                   .sort((a, b) => aiRankedIds.indexOf(a.id) - aiRankedIds.indexOf(b.id));
+      } else {
+        // Simple text fallback
+        docs = docs.filter(d => 
+          d.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+          d.summary.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+      return docs;
     }
-    if (section === NavigationSection.Home) return MOCK_DOCS;
-    return MOCK_DOCS.filter(d => {
+
+    // Priority 2: Section Filtering
+    if (section === NavigationSection.Home) return docs;
+    
+    return docs.filter(d => {
       if (section === NavigationSection.HowTos) return d.category === 'HOWTO';
       if (section === NavigationSection.Guides) return d.category === 'Guide';
       if (section === NavigationSection.ManPages) return d.category === 'ManPage';
@@ -121,7 +131,7 @@ const MainContent: React.FC<MainContentProps> = ({
           </h1>
           {searchQuery && aiSearchExplanation && (
             <div className="mt-4 p-4 bg-orange-50 border border-orange-100 rounded-2xl text-sm text-slate-700 italic flex items-start gap-3">
-              <span className="text-orange-500 font-bold">Tux AI:</span>
+              <span className="text-orange-500 font-bold shrink-0">Tux AI:</span>
               <p>{aiSearchExplanation}</p>
             </div>
           )}
@@ -150,7 +160,6 @@ const MainContent: React.FC<MainContentProps> = ({
             ))}
           </div>
 
-          {/* Pulse/News Section */}
           <div className="p-10 rounded-[3.5rem] bg-slate-50 border border-slate-200">
              <div className="flex items-center justify-between mb-8">
                <h2 className="text-2xl font-black text-slate-900 tracking-tighter flex items-center gap-3">
@@ -204,33 +213,32 @@ const MainContent: React.FC<MainContentProps> = ({
                 </div>
               </div>
 
-              <h3 className="text-2xl font-black text-slate-900 mb-4 group-hover:text-orange-500 transition-colors leading-tight">
+              <h3 className="text-2xl font-black text-slate-900 mb-4 group-hover:text-orange-500 transition-colors">
                 {doc.title}
               </h3>
-              
-              <p className="text-slate-500 text-base leading-relaxed mb-10 flex-1 font-medium">
+              <p className="text-slate-500 text-sm line-clamp-3 font-medium flex-1">
                 {doc.summary}
               </p>
-
-              <div className="flex flex-wrap items-center gap-8 text-[11px] font-black text-slate-400 uppercase tracking-widest">
-                 <button className="flex items-center gap-2 text-slate-900 hover:text-orange-600 transition-all">
-                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                   Full Article
-                 </button>
-                 <button 
-                  onClick={(e) => { e.stopPropagation(); onEdit(doc); }}
-                  className="flex items-center gap-2 hover:text-orange-600 transition-all"
-                 >
-                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-                   Edit
-                 </button>
-                 <button 
-                  onClick={(e) => { e.stopPropagation(); onFlag(doc); }}
-                  className="flex items-center gap-2 hover:text-red-500 transition-all"
-                 >
-                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                   Flag
-                 </button>
+              
+              <div className="mt-8 pt-6 border-t border-slate-50 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-all">
+                <div className="flex gap-2">
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); onEdit(doc); }}
+                    className="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-all"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-5M18.364 5.636a9 9 0 010 12.728" /></svg>
+                  </button>
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); onFlag(doc); }}
+                    className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" /></svg>
+                  </button>
+                </div>
+                <div className="text-orange-500 font-black text-[10px] uppercase tracking-widest flex items-center gap-2">
+                  Read Node
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                </div>
               </div>
             </div>
           ))

@@ -69,5 +69,26 @@ export const MOCK_DOCS: any[] = [
     category: 'Guide',
     summary: 'Transitioning from classic .vimrc to Lua-based NeoVim configurations.',
     lastUpdated: '2023-12-05',
+  },
+  {
+    id: '6',
+    title: 'grep(1) - Manual Page',
+    category: 'ManPage',
+    summary: 'Print lines matching a pattern. A fundamental utility for text processing in Unix-like systems.',
+    lastUpdated: '2023-08-12',
+  },
+  {
+    id: '7',
+    title: 'iptables(8) - Manual Page',
+    category: 'ManPage',
+    summary: 'Administration tool for IPv4 packet filtering and NAT. The legacy standard for Linux firewalls.',
+    lastUpdated: '2023-11-20',
+  },
+  {
+    id: '8',
+    title: 'Secure SSH Best Practices FAQ',
+    category: 'FAQ',
+    summary: 'Common questions regarding hardening OpenSSH, key management, and multi-factor authentication.',
+    lastUpdated: '2024-05-10',
   }
 ];

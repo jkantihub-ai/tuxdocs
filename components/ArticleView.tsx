@@ -15,9 +15,14 @@ const ArticleView: React.FC<ArticleViewProps> = ({ doc, onBack }) => {
   useEffect(() => {
     const fetchSummary = async () => {
       setIsLoading(true);
-      const res = await summarizeArticle(doc.title, doc.summary);
-      setAiSummary(res);
-      setIsLoading(false);
+      try {
+        const res = await summarizeArticle(doc.title, doc.summary);
+        setAiSummary(res || 'Summary generation failed.');
+      } catch (e) {
+        setAiSummary('The AI is currently offline, but you can read the full documentation below.');
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchSummary();
   }, [doc]);
@@ -62,6 +67,11 @@ const ArticleView: React.FC<ArticleViewProps> = ({ doc, onBack }) => {
               sudo apt update && sudo apt upgrade<br/>
               modprobe tuning_module
             </div>
+            <p>
+              Documentation of this nature is vital for maintaining the open-source ecosystem. 
+              Community-driven guides ensure that even the most complex kernel parameters are understandable to 
+              sysadmins of all levels.
+            </p>
           </div>
         </div>
 

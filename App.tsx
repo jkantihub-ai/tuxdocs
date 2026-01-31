@@ -29,14 +29,25 @@ const App: React.FC = () => {
       setAiSearchExplanation('');
       return;
     }
+    
     setIsSearching(true);
     setActiveSection(NavigationSection.Home);
+    
     try {
+      // AI Search attempts to rank the docs
       const result = await searchDocsAI(query, MOCK_DOCS);
-      setAiRankedIds(result.relevantIds);
-      setAiSearchExplanation(result.explanation);
+      if (result && result.relevantIds && result.relevantIds.length > 0) {
+        setAiRankedIds(result.relevantIds);
+        setAiSearchExplanation(result.explanation);
+      } else {
+        // Fallback for no relevant AI results found
+        setAiRankedIds([]);
+        setAiSearchExplanation('No specific AI-ranked results. Showing direct matches.');
+      }
     } catch (e) {
-      console.error(e);
+      console.error("AI Search Failed:", e);
+      setAiRankedIds([]);
+      setAiSearchExplanation('AI index unavailable. Performing local keyword search.');
     } finally {
       setIsSearching(false);
     }
@@ -94,7 +105,8 @@ const App: React.FC = () => {
         onFlag={(doc) => setActiveContribution({ type: 'flag', doc })}
         onRead={(doc) => setViewingArticle(doc)}
         contributions={contributions}
-        onReview={(id) => setContributions(prev => prev.filter(c => c.id !== id))}
+        // Fixed: added second status parameter to match the MainContent signature.
+        onReview={(id, status) => setContributions(prev => prev.filter(c => c.id !== id))}
         searchQuery={searchQuery}
         aiRankedIds={aiRankedIds}
         aiSearchExplanation={aiSearchExplanation}
@@ -126,7 +138,7 @@ const App: React.FC = () => {
               </p>
               <div className="flex flex-wrap gap-6">
                 <button 
-                  onClick={() => setActiveSection(NavigationSection.HowTos)}
+                  onClick={() => handleNavigate(NavigationSection.HowTos)}
                   className="px-10 py-5 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-2xl transition-all shadow-2xl shadow-orange-500/40 scale-105 active:scale-95"
                 >
                   Browse HOWTOs
