@@ -5,13 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TuxDocs | The Linux Documentation Project (Static)</title>
     <meta name="description" content="A static, lightweight version of the Linux Documentation Project.">
+    <style>
+        body { 
+            font-family: system-ui, -apple-system, sans-serif; 
+            line-height: 1.6; 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 40px 20px; 
+            background: #f8fafc; 
+            color: #1e293b; 
+        }
+        header { 
+            border-bottom: 2px solid #e2e8f0; 
+            margin-bottom: 40px; 
+            padding-bottom: 20px; 
+        }
+        nav { margin-top: 15px; }
+        nav a { 
+            margin-right: 20px; 
+            color: #2563eb; 
+            text-decoration: none; 
+            font-weight: 500; 
+        }
+        nav a:hover { text-decoration: underline; }
+        .pro-cta { 
+            display: inline-block; 
+            background: #7c3aed; 
+            color: white !important; 
+            padding: 10px 24px; 
+            border-radius: 12px; 
+            font-weight: 900; 
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); 
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .pro-cta:hover { 
+            background: #6d28d9; 
+            text-decoration: none; 
+        }
+        h1 { font-size: 2.5rem; font-weight: 900; margin: 0; }
+        section { 
+            margin-bottom: 40px; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 20px; 
+            border: 1px solid #e2e8f0; 
+        }
+        h2 { color: #0f172a; margin-top: 0; }
+        ul { list-style: none; padding: 0; }
+        li { 
+            margin-bottom: 20px; 
+            padding-bottom: 20px; 
+            border-bottom: 1px solid #f1f5f9; 
+        }
+        li:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        footer { 
+            margin-top: 60px; 
+            font-size: 0.875rem; 
+            color: #64748b; 
+            text-align: center; 
+            border-top: 1px solid #e2e8f0; 
+            padding-top: 30px; 
+        }
+        strong { color: #0f172a; }
+    </style>
 <script type="importmap">
 {
   "imports": {
-    "@google/genai": "https://esm.sh/@google/genai@^1.39.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
     "react": "https://esm.sh/react@^19.2.4",
-    "react/": "https://esm.sh/react@^19.2.4/"
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.39.0"
   }
 }
 </script>
@@ -19,88 +83,52 @@
 <body>
     <header>
         <h1>TuxDocs</h1>
-        <p><em>The Linux Documentation Project - Legacy Portal</em></p>
+        <p><em>Official Linux Documentation Project - Community Archive</em></p>
         <nav>
-            <a href="index.html">Home</a> | 
-            <a href="#howtos">HOWTOs</a> | 
-            <a href="#guides">Guides</a> | 
-            <a href="#manpages">Man Pages</a> | 
-            <a href="#faq">FAQ</a> | 
-            <strong><a href="pro.html" style="color: purple;">🚀 ENTER AI PRO MODE</a></strong>
+            <a href="index.html">Library Home</a>
+            <a href="#howtos">HOWTOs</a>
+            <a href="#guides">Guides</a>
+            <a href="#manpages">Man Pages</a>
+            <a href="pro.html" class="pro-cta">🚀 LAUNCH AI PRO MODE</a>
         </nav>
     </header>
 
-    <hr>
-
     <section id="welcome">
-        <h2>Welcome to TuxDocs</h2>
-        <p>This is the standard, static version of the Linux Documentation Project. It requires no JavaScript, no external CSS, and no modern browser frameworks. It is designed for maximum compatibility and performance.</p>
-        <p>For an interactive experience including a <strong>Virtual Terminal</strong>, <strong>AI Librarian</strong>, and <strong>Contextual Search</strong>, please visit our <a href="pro.html">Pro Portal</a>.</p>
+        <h2>Welcome to the Static Archive</h2>
+        <p>This is the <strong>pure HTML5</strong> version of TuxDocs. It is designed for maximum compatibility across all devices, including text-based browsers and legacy systems. No modern frameworks are loaded on this page.</p>
+        <p>To access the modern, AI-enhanced portal with an <strong>Interactive Terminal</strong> and <strong>AI Librarian</strong>, click the button above.</p>
     </section>
 
-    <hr>
-
     <section id="howtos">
-        <h2>HOWTOs</h2>
+        <h2>Popular HOWTOs</h2>
         <ul>
             <li>
-                <strong>Linux Kernel 6.x Hardware Hacking</strong> (2024-03-20)<br>
-                A deep dive into writing drivers for modern ARM64 systems and custom PCIe devices.
+                <strong>Linux Kernel 6.x Hardware Hacking</strong><br>
+                Comprehensive documentation on writing drivers for ARM64 architectures and custom PCIe peripherals.
             </li>
             <li>
-                <strong>Systemd Boot Optimization</strong> (2024-04-01)<br>
-                Techniques for reducing boot time on production servers using systemd-analyze.
+                <strong>Systemd Boot Optimization</strong><br>
+                Practical steps for reducing startup times using systemd-analyze and boot profiling.
             </li>
         </ul>
     </section>
 
     <section id="guides">
-        <h2>Guides</h2>
+        <h2>Advanced Guides</h2>
         <ul>
             <li>
-                <strong>The Advanced Bash-Scripting Guide</strong> (2024-01-15)<br>
-                An in-depth exploration of the art of shell scripting, updated for Bash 5.2+ features.
+                <strong>The Advanced Bash-Scripting Guide</strong><br>
+                An exhaustive tutorial on shell scripting, covering everything from loops to process substitution.
             </li>
             <li>
-                <strong>Vim Mastery: Modern Configs</strong> (2023-12-05)<br>
-                Transitioning from classic .vimrc to Lua-based NeoVim configurations.
+                <strong>Vim Mastery: Modern Configs</strong><br>
+                Guide to building high-performance text editing environments using NeoVim and Lua.
             </li>
         </ul>
     </section>
-
-    <section id="faq">
-        <h2>FAQs</h2>
-        <ul>
-            <li>
-                <strong>Docker-to-Podman Migration FAQ</strong> (2024-02-10)<br>
-                Comprehensive list of differences and migration steps for daemonless container management.
-            </li>
-            <li>
-                <strong>Secure SSH Best Practices FAQ</strong> (2024-05-10)<br>
-                Common questions regarding hardening OpenSSH, key management, and multi-factor authentication.
-            </li>
-        </ul>
-    </section>
-
-    <section id="manpages">
-        <h2>Manual Pages</h2>
-        <ul>
-            <li>
-                <strong>grep(1)</strong> (2023-08-12)<br>
-                Print lines matching a pattern. A fundamental utility for text processing in Unix-like systems.
-            </li>
-            <li>
-                <strong>iptables(8)</strong> (2023-11-20)<br>
-                Administration tool for IPv4 packet filtering and NAT. The legacy standard for Linux firewalls.
-            </li>
-        </ul>
-    </section>
-
-    <hr>
 
     <footer>
-        <p>The Linux Documentation Project &copy; 2025</p>
-        <p><small>Node: ldp-static-01 | Powered by Tux</small></p>
+        <p>The Linux Documentation Project &copy; 2025 | Node: ldp-static-01</p>
     </footer>
 </body>
 </html>
