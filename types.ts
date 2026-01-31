@@ -16,7 +16,7 @@ export interface Contribution {
   status: 'pending' | 'approved' | 'rejected';
   submittedBy: string;
   timestamp: string;
-  targetId?: string; // For edits or flags
+  targetId?: string;
 }
 
 export interface ChatMessage {
@@ -33,5 +33,6 @@ export enum NavigationSection {
   Search = 'search',
   Moderation = 'moderation',
   Terminal = 'terminal',
-  About = 'about'
+  About = 'about',
+  Pro = 'pro'
 }

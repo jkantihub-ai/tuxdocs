@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Layout from './components/Layout';
 import MainContent from './components/MainContent';
 import TuxAssistant from './components/TuxAssistant';
@@ -7,6 +7,7 @@ import ContributionForm from './components/ContributionForm';
 import Terminal from './components/Terminal';
 import ArticleView from './components/ArticleView';
 import About from './components/About';
+import ProLanding from './components/ProLanding';
 import { NavigationSection, DocItem, Contribution } from './types';
 import { searchDocsAI } from './services/gemini';
 import { MOCK_DOCS } from './constants';
@@ -17,6 +18,7 @@ const App: React.FC = () => {
   const [aiRankedIds, setAiRankedIds] = useState<string[]>([]);
   const [aiSearchExplanation, setAiSearchExplanation] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const [isProEnabled, setIsProEnabled] = useState(false);
   const [contributions, setContributions] = useState<Contribution[]>([]);
   const [activeContribution, setActiveContribution] = useState<{type: 'edit' | 'new' | 'flag', doc?: DocItem} | null>(null);
   const [viewingArticle, setViewingArticle] = useState<DocItem | null>(null);
@@ -30,26 +32,31 @@ const App: React.FC = () => {
       return;
     }
     
-    setIsSearching(true);
+    // Always start with home view for search
     setActiveSection(NavigationSection.Home);
-    
-    try {
-      // AI Search attempts to rank the docs
-      const result = await searchDocsAI(query, MOCK_DOCS);
-      if (result && result.relevantIds && result.relevantIds.length > 0) {
-        setAiRankedIds(result.relevantIds);
-        setAiSearchExplanation(result.explanation);
-      } else {
-        // Fallback for no relevant AI results found
+
+    // AI search only happens if Pro is enabled
+    if (isProEnabled) {
+      setIsSearching(true);
+      try {
+        const result = await searchDocsAI(query, MOCK_DOCS);
+        if (result && result.relevantIds && result.relevantIds.length > 0) {
+          setAiRankedIds(result.relevantIds);
+          setAiSearchExplanation(result.explanation);
+        } else {
+          setAiRankedIds([]);
+          setAiSearchExplanation('');
+        }
+      } catch (e) {
         setAiRankedIds([]);
-        setAiSearchExplanation('No specific AI-ranked results. Showing direct matches.');
+        setAiSearchExplanation('');
+      } finally {
+        setIsSearching(false);
       }
-    } catch (e) {
-      console.error("AI Search Failed:", e);
+    } else {
+      // Local fallback for static version
       setAiRankedIds([]);
-      setAiSearchExplanation('AI index unavailable. Performing local keyword search.');
-    } finally {
-      setIsSearching(false);
+      setAiSearchExplanation('');
     }
   };
 
@@ -78,15 +85,19 @@ const App: React.FC = () => {
 
   const renderContent = () => {
     if (viewingArticle) {
-      return <ArticleView doc={viewingArticle} onBack={() => setViewingArticle(null)} />;
+      return <ArticleView doc={viewingArticle} onBack={() => setViewingArticle(null)} isPro={isProEnabled} />;
     }
 
     if (activeSection === NavigationSection.Terminal) {
-      return <Terminal />;
+      return <Terminal isPro={isProEnabled} onUpgrade={() => setActiveSection(NavigationSection.Pro)} />;
     }
 
     if (activeSection === NavigationSection.About) {
       return <About />;
+    }
+
+    if (activeSection === NavigationSection.Pro) {
+      return <ProLanding isPro={isProEnabled} onUpgrade={() => setIsProEnabled(true)} />;
     }
 
     if (isSearching) {
@@ -105,11 +116,11 @@ const App: React.FC = () => {
         onFlag={(doc) => setActiveContribution({ type: 'flag', doc })}
         onRead={(doc) => setViewingArticle(doc)}
         contributions={contributions}
-        // Fixed: added second status parameter to match the MainContent signature.
         onReview={(id, status) => setContributions(prev => prev.filter(c => c.id !== id))}
         searchQuery={searchQuery}
         aiRankedIds={aiRankedIds}
         aiSearchExplanation={aiSearchExplanation}
+        isPro={isProEnabled}
       />
     );
   };
@@ -119,6 +130,7 @@ const App: React.FC = () => {
       activeSection={activeSection} 
       onNavigate={handleNavigate}
       onSearch={handleSearch}
+      isPro={isProEnabled}
     >
       <div className="max-w-7xl mx-auto h-full">
         {renderContent()}
@@ -134,7 +146,7 @@ const App: React.FC = () => {
                 Empowering <span className="text-orange-500">Systems</span> through Knowledge.
               </h2>
               <p className="text-slate-400 mb-10 text-lg leading-relaxed font-medium">
-                TuxDocs simplifies complex Linux documentation with real-time AI insights, a simulated terminal for safe testing, and a crowdsourced moderation engine.
+                TuxDocs simplifies complex Linux documentation with a clean modern interface and crowdsourced moderation. {isProEnabled ? 'AI Enhanced features are active.' : 'Enable Pro for AI features.'}
               </p>
               <div className="flex flex-wrap gap-6">
                 <button 
@@ -165,7 +177,7 @@ const App: React.FC = () => {
         />
       )}
 
-      <TuxAssistant />
+      {isProEnabled && <TuxAssistant />}
       
       <div className="fixed bottom-0 left-0 right-0 bg-white/60 backdrop-blur-xl border-t border-slate-100 px-10 py-2 flex items-center justify-between pointer-events-none md:pointer-events-auto z-[40]">
         <div className="flex items-center gap-3 text-[10px] text-slate-400 font-black uppercase tracking-[0.3em]">
@@ -173,7 +185,7 @@ const App: React.FC = () => {
           Node: ldp-distributed-01
         </div>
         <div className="hidden sm:block text-[10px] text-slate-300 font-bold">
-          The Linux Documentation Project © 2025 • AI-Enhanced Experience
+          The Linux Documentation Project © 2025 • {isProEnabled ? 'Pro Active' : 'Static Mode'}
         </div>
       </div>
     </Layout>

@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TuxDocs | The Future of TLDP</title>
     <meta name="theme-color" content="#f97316">
-    <meta name="description" content="AI-powered Linux Documentation Project with real-time assistance and virtual terminal.">
+    <meta name="description" content="Community-driven Linux Documentation Project with optional AI-powered Pro features.">
     
     <!-- PWA Manifest -->
-    <link rel="manifest" href="metadata.json">
+    <link rel="manifest" href="./metadata.json">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/518/518713.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -30,7 +30,6 @@
         .mono {
             font-family: 'JetBrains Mono', monospace;
         }
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -44,20 +43,11 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
-        /* Glassmorphism Light */
-        .glass {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(249, 115, 22, 0.1);
-        }
-        /* Smoother transitions */
-        * {
-            transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-            transition-duration: 200ms;
-        }
         .shadow-3xl {
             box-shadow: 0 35px 60px -15px rgba(15, 23, 42, 0.3);
+        }
+        .pro-gradient {
+            background: linear-gradient(135deg, #f97316 0%, #7c3aed 100%);
         }
     </style>
 <script type="importmap">
@@ -74,7 +64,6 @@
 </head>
 <body>
     <div id="root"></div>
-    <!-- Entry point script -->
-    <script type="module" src="index.tsx"></script>
+    <script type="module" src="./index.tsx"></script>
 </body>
 </html>

@@ -13,6 +13,7 @@ interface MainContentProps {
   searchQuery?: string;
   aiRankedIds: string[];
   aiSearchExplanation?: string;
+  isPro: boolean;
 }
 
 const MainContent: React.FC<MainContentProps> = ({ 
@@ -24,7 +25,8 @@ const MainContent: React.FC<MainContentProps> = ({
   onReview,
   searchQuery,
   aiRankedIds,
-  aiSearchExplanation
+  aiSearchExplanation,
+  isPro
 }) => {
   const getSectionTitle = () => {
     if (searchQuery) return `Results for "${searchQuery}"`;
@@ -41,14 +43,11 @@ const MainContent: React.FC<MainContentProps> = ({
   const getFilteredDocs = () => {
     let docs = [...MOCK_DOCS];
 
-    // Priority 1: Search Logic
     if (searchQuery) {
-      if (aiRankedIds.length > 0) {
-        // Use AI rankings if available
+      if (isPro && aiRankedIds.length > 0) {
         docs = docs.filter(d => aiRankedIds.includes(d.id))
                    .sort((a, b) => aiRankedIds.indexOf(a.id) - aiRankedIds.indexOf(b.id));
       } else {
-        // Simple text fallback
         docs = docs.filter(d => 
           d.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
           d.summary.toLowerCase().includes(searchQuery.toLowerCase())
@@ -57,7 +56,6 @@ const MainContent: React.FC<MainContentProps> = ({
       return docs;
     }
 
-    // Priority 2: Section Filtering
     if (section === NavigationSection.Home) return docs;
     
     return docs.filter(d => {
@@ -109,7 +107,7 @@ const MainContent: React.FC<MainContentProps> = ({
                    </button>
                    <button 
                     onClick={() => onReview(con.id, 'approved')}
-                    className="px-6 py-3 bg-orange-500 text-white font-bold text-xs rounded-2xl hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20"
+                    className="px-6 py-3 bg-orange-500 text-white font-bold text-xs rounded-2xl hover:bg-orange-600 transition-all shadow-lg"
                    >
                      Approve
                    </button>
@@ -129,9 +127,9 @@ const MainContent: React.FC<MainContentProps> = ({
           <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter">
             {getSectionTitle()}
           </h1>
-          {searchQuery && aiSearchExplanation && (
-            <div className="mt-4 p-4 bg-orange-50 border border-orange-100 rounded-2xl text-sm text-slate-700 italic flex items-start gap-3">
-              <span className="text-orange-500 font-bold shrink-0">Tux AI:</span>
+          {isPro && searchQuery && aiSearchExplanation && (
+            <div className="mt-4 p-4 bg-purple-50 border border-purple-100 rounded-2xl text-sm text-slate-700 italic flex items-start gap-3">
+              <span className="text-purple-600 font-bold shrink-0">AI Insight:</span>
               <p>{aiSearchExplanation}</p>
             </div>
           )}
@@ -147,13 +145,13 @@ const MainContent: React.FC<MainContentProps> = ({
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { label: 'HOWTOs', val: '5,821', color: 'orange' },
-              { label: 'Guides', val: '432', color: 'blue' },
-              { label: 'Translators', val: '89', color: 'green' },
-              { label: 'Uptime', val: '99.9%', color: 'purple' },
+              { label: 'HOWTOs', val: '5,821' },
+              { label: 'Guides', val: '432' },
+              { label: 'Translators', val: '89' },
+              { label: 'Uptime', val: '99.9%' },
             ].map((stat, i) => (
               <div key={i} className="p-8 rounded-[2.5rem] bg-white border border-slate-100 shadow-sm hover:shadow-2xl transition-all group overflow-hidden relative">
-                <div className={`absolute -right-4 -top-4 w-20 h-20 bg-orange-500/5 blur-2xl group-hover:bg-orange-500/10 transition-all`}></div>
+                <div className="absolute -right-4 -top-4 w-20 h-20 bg-orange-500/5 blur-2xl group-hover:bg-orange-500/10 transition-all"></div>
                 <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-2">{stat.label}</p>
                 <p className="text-3xl font-black text-slate-900 mt-1">{stat.val}</p>
               </div>
@@ -163,12 +161,9 @@ const MainContent: React.FC<MainContentProps> = ({
           <div className="p-10 rounded-[3.5rem] bg-slate-50 border border-slate-200">
              <div className="flex items-center justify-between mb-8">
                <h2 className="text-2xl font-black text-slate-900 tracking-tighter flex items-center gap-3">
-                 <span className="w-3 h-3 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.5)]"></span>
+                 <span className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
                  Kernel Pulse
                </h2>
-               <button className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-orange-500 transition-colors">
-                 View All Updates
-               </button>
              </div>
              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {[
@@ -200,7 +195,7 @@ const MainContent: React.FC<MainContentProps> = ({
           filteredDocs.map((doc: DocItem) => (
             <div 
               key={doc.id} 
-              className="group relative flex flex-col p-10 rounded-[3rem] bg-white border border-slate-100 hover:border-orange-500/30 hover:shadow-3xl transition-all cursor-pointer"
+              className={`group relative flex flex-col p-10 rounded-[3rem] bg-white border border-slate-100 hover:shadow-3xl transition-all cursor-pointer ${isPro ? 'hover:border-purple-500/30' : 'hover:border-orange-500/30'}`}
               onClick={() => onRead(doc)}
             >
               <div className="flex items-center justify-between mb-6">
@@ -213,7 +208,7 @@ const MainContent: React.FC<MainContentProps> = ({
                 </div>
               </div>
 
-              <h3 className="text-2xl font-black text-slate-900 mb-4 group-hover:text-orange-500 transition-colors">
+              <h3 className={`text-2xl font-black text-slate-900 mb-4 transition-colors ${isPro ? 'group-hover:text-purple-600' : 'group-hover:text-orange-500'}`}>
                 {doc.title}
               </h3>
               <p className="text-slate-500 text-sm line-clamp-3 font-medium flex-1">
@@ -222,20 +217,11 @@ const MainContent: React.FC<MainContentProps> = ({
               
               <div className="mt-8 pt-6 border-t border-slate-50 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-all">
                 <div className="flex gap-2">
-                  <button 
-                    onClick={(e) => { e.stopPropagation(); onEdit(doc); }}
-                    className="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-all"
-                  >
+                  <button onClick={(e) => { e.stopPropagation(); onEdit(doc); }} className="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-5M18.364 5.636a9 9 0 010 12.728" /></svg>
                   </button>
-                  <button 
-                    onClick={(e) => { e.stopPropagation(); onFlag(doc); }}
-                    className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" /></svg>
-                  </button>
                 </div>
-                <div className="text-orange-500 font-black text-[10px] uppercase tracking-widest flex items-center gap-2">
+                <div className={`${isPro ? 'text-purple-600' : 'text-orange-500'} font-black text-[10px] uppercase tracking-widest flex items-center gap-2`}>
                   Read Node
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </div>
