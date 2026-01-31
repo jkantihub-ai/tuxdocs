@@ -32,5 +32,6 @@ export enum NavigationSection {
   ManPages = 'manpages',
   Search = 'search',
   Moderation = 'moderation',
-  Terminal = 'terminal'
+  Terminal = 'terminal',
+  About = 'about'
 }

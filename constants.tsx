@@ -2,12 +2,35 @@
 import React from 'react';
 
 export const TUX_LOGO = (className: string) => (
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-    <path d="M12 2C8.13401 2 5 5.13401 5 9C5 10.3815 5.40228 11.669 6.09641 12.7554C5.40538 13.5678 5 14.6295 5 15.7931C5 18.5133 7.46243 20.7241 10.5 20.7241C10.5186 20.7241 10.537 20.724 10.5555 20.7238C10.8407 21.4398 11.3533 22 12 22C12.6467 22 13.1593 21.4398 13.4445 20.7238C13.463 20.724 13.4814 20.7241 13.5 20.7241C16.5376 20.7241 19 18.5133 19 15.7931C19 14.6295 18.5946 13.5678 17.9036 12.7554C18.5977 11.669 19 10.3815 19 9C19 5.13401 15.866 2 12 2Z" fill="currentColor"/>
-    <circle cx="9.5" cy="8.5" r="1.5" fill="black"/>
-    <circle cx="14.5" cy="8.5" r="1.5" fill="black"/>
-    <path d="M10 11.5C10 11.5 11 13 12 13C13 13 14 11.5 14 11.5" stroke="black" strokeWidth="1.5" strokeLinecap="round"/>
-    <path d="M12 12L11 14.5H13L12 12Z" fill="#FF8C00"/>
+  <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    {/* Body Shadow */}
+    <circle cx="50" cy="55" r="42" fill="currentColor" fillOpacity="0.1" />
+    
+    {/* Main Body (Penguin Shape) */}
+    <path d="M50 8C32 8 18 25 18 50C18 70 28 88 50 88C72 88 82 70 82 50C82 25 68 8 50 8Z" fill="currentColor" />
+    
+    {/* White Belly (The "Playful" Roundness) */}
+    <path d="M50 25C38 25 28 38 28 55C28 72 38 82 50 82C62 82 72 72 72 55C72 38 62 25 50 25Z" fill="white" />
+    
+    {/* Eyes - Large and Playful */}
+    <circle cx="40" cy="35" r="7" fill="white" />
+    <circle cx="60" cy="35" r="7" fill="white" />
+    <circle cx="41" cy="36" r="3.5" fill="#0F172A" />
+    <circle cx="61" cy="36" r="3.5" fill="#0F172A" />
+    <circle cx="39" cy="34" r="1.5" fill="white" />
+    <circle cx="59" cy="34" r="1.5" fill="white" />
+    
+    {/* Beak - Modern Orange Accent */}
+    <path d="M45 44C45 44 47 52 50 52C53 52 55 44 55 44H45Z" fill="#F97316" />
+    <path d="M47 44C47 44 49 48 50 48C51 48 53 44 53 44H47Z" fill="#FB923C" />
+    
+    {/* Flippers */}
+    <path d="M18 50C10 50 8 65 15 72" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
+    <path d="M82 50C90 50 92 65 85 72" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
+    
+    {/* Feet - Playful Orange Paddles */}
+    <path d="M30 85C30 80 40 80 42 85H30Z" fill="#F97316" />
+    <path d="M58 85C58 80 68 80 70 85H58Z" fill="#F97316" />
   </svg>
 );
 

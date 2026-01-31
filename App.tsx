@@ -6,6 +6,7 @@ import TuxAssistant from './components/TuxAssistant';
 import ContributionForm from './components/ContributionForm';
 import Terminal from './components/Terminal';
 import ArticleView from './components/ArticleView';
+import About from './components/About';
 import { NavigationSection, DocItem, Contribution } from './types';
 import { searchDocsAI } from './services/gemini';
 import { MOCK_DOCS } from './constants';
@@ -71,6 +72,10 @@ const App: React.FC = () => {
 
     if (activeSection === NavigationSection.Terminal) {
       return <Terminal />;
+    }
+
+    if (activeSection === NavigationSection.About) {
+      return <About />;
     }
 
     if (isSearching) {
