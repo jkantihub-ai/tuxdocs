@@ -2,7 +2,7 @@
   "name": "TuxDocs | The Modern LDP",
   "short_name": "TuxDocs",
   "description": "AI-powered Linux Documentation Project with real-time assistance, virtual terminal simulation, and community moderation.",
-  "start_url": "/",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f8fafc",
   "theme_color": "#f97316",

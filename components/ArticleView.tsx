@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState } from 'react';
-import { DocItem } from '../types';
-import { summarizeArticle } from '../services/gemini';
+import { DocItem } from '../types.ts';
+import { summarizeArticle } from '../services/gemini.ts';
 
 interface ArticleViewProps {
   doc: DocItem;

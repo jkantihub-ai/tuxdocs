@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { TUX_LOGO } from '../constants';
+import { TUX_LOGO } from '../constants.tsx';
 
 const About: React.FC = () => {
   return (

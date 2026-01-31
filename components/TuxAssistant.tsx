@@ -1,8 +1,7 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { askTux } from '../services/gemini';
-import { TUX_LOGO } from '../constants';
-import { ChatMessage } from '../types';
+import { askTux } from '../services/gemini.ts';
+import { TUX_LOGO } from '../constants.tsx';
+import { ChatMessage } from '../types.ts';
 
 const TuxAssistant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);

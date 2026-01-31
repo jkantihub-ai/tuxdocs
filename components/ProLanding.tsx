@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { TUX_LOGO } from '../constants';
+import { TUX_LOGO } from '../constants.tsx';
 
 interface ProLandingProps {
   isPro: boolean;

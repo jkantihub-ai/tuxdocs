@@ -1,7 +1,6 @@
-
 import React from 'react';
-import { MOCK_DOCS } from '../constants';
-import { DocItem, NavigationSection, Contribution } from '../types';
+import { MOCK_DOCS } from '../constants.tsx';
+import { DocItem, NavigationSection, Contribution } from '../types.ts';
 
 interface MainContentProps {
   section: NavigationSection;

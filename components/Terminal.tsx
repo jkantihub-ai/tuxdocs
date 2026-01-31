@@ -1,6 +1,5 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { executeSimulatedCommand } from '../services/gemini';
+import { executeSimulatedCommand } from '../services/gemini.ts';
 
 interface TerminalProps {
   isPro: boolean;
